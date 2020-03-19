@@ -1,19 +1,42 @@
 "use strict"
 
+require("dotenv").config();
 const { Pool } = require('pg');
 
 
 const pool = new Pool({
-    user: "user",
-    host: "localhost",
-    database: "db",
-    password: "pass",
-    port: 5432
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASS,
 });
 
 
 pool.connect();
 
+
+//Make tables
+const createTable = async function () {
+  try {
+      const db = await pool.query(
+          `CREATE TABLE IF NOT EXISTS 
+          Visitors(
+          id SERIAL PRIMARY KEY,
+          v_name VARCHAR(50),
+          visitor_age INTEGER,
+          date_Of_visit DATE,
+          time_Of_visit TIME,
+          assistant VARCHAR(50),
+          comments VARCHAR(255)
+      );`)
+     
+	return query.rows
+    
+  }catch (error) {
+      console.error(error);
+  }
+}
+              
+createTable();
 
 // Add vistor to database
 const addNewVisitor = async(v_name, dateofvisit, timeofvisit, assistant, comments) => {
